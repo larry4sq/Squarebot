@@ -1,3 +1,7 @@
 campfire:
-  token: 7ab75cbf747dfb5e4c7474b5ce3e5edba6269bff
-  room: 532190
+  token: token_goes_here
+  room: room_id_goes_here
+foursquare:
+  token: foursquare_api_token_goes_here
+  ll: "39.9,-72.2" #these are for the where_should.rb plugin
+  ll2: "22.3,-55.1"
