@@ -21,11 +21,19 @@ class PlusPlus < Squarebot::Plugin
       top += ["BOTTOM"] + @data.sort_by{|k,v| v}.take(3).map{|k,v| "#{k}: #{v}"} if @data.size > 3
       return top
     end
+    if (matches = message.match(/check ([^+-:\s\n]+)/i))
+      name = matches[1]
+      if (@data[name])
+        return "#{name} is at #{@data[name]}."
+      else
+        return "#{name} not found."
+      end
+    end
     nil
   end
 
   def react(message, user, options)
-    if (message.include?("++") || message.include?("--")))
+    if (message.include?("++") || message.include?("--"))
       initialize()
       plus = /(\+\+)+/
       minus = /(--)+/
