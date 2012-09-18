@@ -1,6 +1,6 @@
 require 'fileutils'
 class HaterChecker < Squarebot::Plugin
-  FILE = File.join(Squarebot.root, 'haterchecker.json')
+  FILE = File.join(Squarebot.root, 'hatercounter.json')
   register self, "keeps track of who's been hatin'", "-- all the way!"
 
   def persist
@@ -16,24 +16,25 @@ class HaterChecker < Squarebot::Plugin
   def respond(message, user, options)
     initialize()
     if(message.downcase == "haters")
-      top = ["TOP"] + @data.sort_by{|k,v| -v}.take(5).map{|k,v| "#{k}: #{v}"}
+      top = ["TOP"] + @data.sort_by{|k,v| -v}.take(5).map{|k,v| "#{Campfire.user(k.to_i)['name']}: #{v}"}
       return top
     end
     nil
   end
 
   def react(message, user, options)
+    id = user.to_s
     if (message.include?("--"))
       initialize()
       minus = /(--)+/
       matches = message.match(/([^+-:\s\n]+)(#{minus})/)
       if (matches)
-        @data[user] ||= 0
-        @data[user] += 1
+        puts id
+        @data[id] += 1
         persist
-	nil
       end
     end
+    nil
   end
 
 end
