@@ -21,12 +21,14 @@ class PlusPlus < Squarebot::Plugin
       top += ["BOTTOM"] + @data.sort_by{|k,v| v}.take(3).map{|k,v| "#{k}: #{v}"} if @data.size > 3
       return top
     end
-    if (matches = message.match(/check ([^+-:\s\n]+)/i))
-      name = matches[1]
+    if (matches = message.downcase.match(/check ([^+-:\s\n]+)/i))
+      oldname = matches[1]
+      name = oldname.downcase
+
       if (@data[name])
-        return "#{name} is at #{@data[name]}."
+        return "#{oldname} is at #{@data[name]}."
       else
-        return "#{name} not found."
+        return "#{oldname} not found."
       end
     end
     nil
@@ -39,15 +41,21 @@ class PlusPlus < Squarebot::Plugin
       minus = /(--)+/
       matches = message.match(/([^+-:\s\n]+)(#{plus}|#{minus})/)
       if (matches)
-        name = matches[1]
+        oldname = matches[1]
+        name = oldname.downcase
 
         direction = matches[2].match(plus) ? (matches[2].size / 2.0).floor : (matches[2].size / 2.0).floor * -1
         puts "found: #{name}, #{direction}"
+	
         @data[name] ||= 0
+	if (oldname != name and @data[oldname])
+	  @data[name] += @data[oldname]
+          @data.delete(oldname)
+        end
         @data[name] += direction
         goodbad = direction > 0 ? "woot!" : "oh noes!"
         persist
-        return "#{name} now at #{@data[name]} (#{goodbad})"
+        return "#{oldname} now at #{@data[name]} (#{goodbad})"
       end
     end
   end
