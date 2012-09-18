@@ -39,12 +39,13 @@ class PlusPlus < Squarebot::Plugin
       initialize()
       plus = /(\+\+)+/
       minus = /(--)+/
-      matches = message.match(/([^+-:\s\n]+)(#{plus}|#{minus})/)
-      if (matches)
-        oldname = matches[1]
+
+      karma = ""
+      message.scan(/([^+-:\s\n]+)(#{plus}|#{minus})/).each do|matches|
+        oldname = matches[0]
         name = oldname.downcase
 
-        direction = matches[2].match(plus) ? (matches[2].size / 2.0).floor : (matches[2].size / 2.0).floor * -1
+        direction = matches[1].match(plus) ? (matches[1].size / 2.0).floor : (matches[1].size / 2.0).floor * -1
         puts "found: #{name}, #{direction}"
 	
         @data[name] ||= 0
@@ -55,7 +56,10 @@ class PlusPlus < Squarebot::Plugin
         @data[name] += direction
         goodbad = direction > 0 ? "woot!" : "oh noes!"
         persist
-        return "#{oldname} now at #{@data[name]} (#{goodbad})"
+        karma += "#{oldname} now at #{@data[name]} (#{goodbad})\n"
+      end
+      if (karma != "")
+        return karma
       end
     end
   end
