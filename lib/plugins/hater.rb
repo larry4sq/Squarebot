@@ -29,7 +29,6 @@ class HaterChecker < Squarebot::Plugin
       minus = /(--)+/
       matches = message.match(/([^+-:\s\n]+)(#{minus})/)
       if (matches)
-        puts id
         @data[id] += 1
         persist
       end
