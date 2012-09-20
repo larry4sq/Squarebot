@@ -41,7 +41,7 @@ class PlusPlus < Squarebot::Plugin
       minus = /(--)+/
 
       karma = ""
-      message.scan(/(([^+-:\s\n]|\.)+)(#{plus}|#{minus})/).each do|matches|
+      message.scan(/(([^+\-\n\s\/])+)(#{plus}|#{minus})/).each do|matches|
         oldname = matches[0]
         name = oldname.downcase
 	dir = matches[2]
